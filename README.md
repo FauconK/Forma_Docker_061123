@@ -127,7 +127,7 @@ services:
 ### Lancement de notre conteneur
 A l’intérieur de notre répertoire de travail, on execute la commande suivante.
 ```shell
-sudo docker-compose up -d
+sudo docker compose up -d
 ```
 Si cette commande vous renvoie une erreur ou que si vous avez l'impression que le conteneur ne démarre pas, lancer la commande sans le `-d` cela vous permettra d'avoir des logs et de debug votre container.
 Puis on visite l'url suivant : http://localhost:8080/

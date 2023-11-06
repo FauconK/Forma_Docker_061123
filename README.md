@@ -89,24 +89,24 @@ Pour des questions de lisibilité nous allons aussi donner un nom à notre conta
 ```yaml
 services:
   mon-site-web:
-	  container_name: mon-container
+  	container_name: mon-container
 ```
 
 On rajoute l'image Nginx à notre fichier docker compose tout en précisant d'utiliser la version la plus récente de l'image (pour les curieux, les versions de l'image Docker Nginx sont trouvable sur [Docker Hub](https://hub.docker.com/_/nginx/)).
 ```yaml
 services:
   mon-site-web:
-	  container_name: mon-container
-	  image: nginx:latest
+  	container_name: mon-container
+	image: nginx:latest
 ```
 Pour le port, on va demander à Docker d'exposer le port 80 du conteneur Nginx sur le port 8080 de votre machine hôte.
 ```yaml
 services:
   mon-site-web:
-	  container_name: mon-container
-	  image: nginx:latest
-	  ports:
-		  - "8080:80"
+  	container_name: mon-container
+	image: nginx:latest
+	ports:
+		- "8080:80"
 ```
 Pour finir, il nous reste plus qu'à donner le notre fichier ``index.html`` au conteneur. 
 Le serveur web Nginx sert tous les fichiers qui se trouvent dans son répertoire `/usr/share/nginx/html/`. Nous allons donc dire à Nginx de mettre notre fichier ``index.html`` dans le dossier `/usr/share/nginx/html` du conteneur.

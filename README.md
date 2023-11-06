@@ -15,4 +15,8 @@
   * Le site sera sur le port 5000 (HTTP)
 * Tester le site
 
+### References 
+* [Getting started with Flask](https://flask.palletsprojects.com/en/2.2.x/quickstart/)
+* [Containerize an application](https://docs.docker.com/get-started/02_our_app/)
+
 ## Déployer un nginx

@@ -113,7 +113,7 @@ Le serveur web Nginx sert tous les fichiers qui se trouvent dans son répertoire
 ```yaml
 version: '3'
 services:
-  mon-site-web:
+	mon-site-web:
 	container_name: mon-container
     image: nginx:latest
     ports:

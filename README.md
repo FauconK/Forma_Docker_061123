@@ -242,12 +242,14 @@ volumes:
 Nous allons maintenant passer quelques variables d'environnement aux deux conteneurs, ces variables d'environnement sont des variables définies par la documentation de wordpress. 
 Une variable d'environnement Docker est une valeur spécifique que vous pouvez définir pour influencer le comportement d'un conteneur Docker. C'est comme une petite note que vous donnez au conteneur pour lui dire comment se comporter. Par exemple, vous pouvez définir une variable d'environnement pour spécifier un mot de passe, une URL, ou d'autres paramètres nécessaires à une application qui s'exécute dans le conteneur. Ces variables sont utilisées par les applications à l'intérieur du conteneur pour configurer leur fonctionnement.
 Nous allons définir les variables suivantes
+
 Pour wordpress:
  - WORDPRESS_DB_HOST=db
  - WORDPRESS_DB_USER=wordpress
  - WORDPRESS_DB_PASSWORD=wordpress
  - WORDPRESS_DB_NAME=wordpress
-Pour la base de donnée
+
+Pour la base de donnée:
 - MYSQL_ROOT_PASSWORD=somewordpress
 - MYSQL_DATABASE=wordpress
 - MYSQL_USER=wordpress

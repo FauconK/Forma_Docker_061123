@@ -89,32 +89,32 @@ Pour des questions de lisibilité nous allons aussi donner un nom à notre conta
 ```yaml
 services:
   mon-site-web:
-  	container_name: mon-container
+   container_name: mon-container
 ```
 
 On rajoute l'image Nginx à notre fichier docker compose tout en précisant d'utiliser la version la plus récente de l'image (pour les curieux, les versions de l'image Docker Nginx sont trouvable sur [Docker Hub](https://hub.docker.com/_/nginx/)).
 ```yaml
 services:
   mon-site-web:
-  	container_name: mon-container
-	image: nginx:latest
+   container_name: mon-container
+ image: nginx:latest
 ```
 Pour le port, on va demander à Docker d'exposer le port 80 du conteneur Nginx sur le port 8080 de votre machine hôte.
 ```yaml
 services:
   mon-site-web:
-  	container_name: mon-container
-	image: nginx:latest
-	ports:
-		- "8080:80"
+   container_name: mon-container
+ image: nginx:latest
+ ports:
+  - "8080:80"
 ```
 Pour finir, il nous reste plus qu'à donner le notre fichier ``index.html`` au conteneur. 
 Le serveur web Nginx sert tous les fichiers qui se trouvent dans son répertoire `/usr/share/nginx/html/`. Nous allons donc dire à Nginx de mettre notre fichier ``index.html`` dans le dossier `/usr/share/nginx/html` du conteneur.
 ```yaml
 version: '3'
 services:
-	mon-site-web:
-	container_name: mon-container
+ mon-site-web:
+ container_name: mon-container
     image: nginx:latest
     ports:
       - "8080:80"
@@ -172,10 +172,10 @@ Il nous faudra en gros d'après la documentation
 	- Un moyen de laisser l'utilisateur se connecter à WordPress
 - Un conteneur pour la base de donnée
 	- Un endroit où stocker les données des utilisateurs( les comptes, les sites web...)
-	- Un moyen de laisser WordPress se connecter à la base de donnée.
+ 	- Un moyen de laisser WordPress se connecter à la base de donnée.
 
 Avec un schéma ça donne ça
-![[docker.drawio 1.png]]
+!["Schéma WordPress"](monpremierdockercompose/images/docker.drawio%201.png)
 On va commencer à décrire cette architecture multi-conteneur dans un fichier `docker-compose.yml`.
 ### Fichier docker compose
 Nous allons dans un premier temps créer un nouveau dossier vide.
@@ -188,50 +188,50 @@ Ensuite on va créer un fichier `docker-compose.yml`.
 Notre fichier docker compose ressemble donc à ça pour le moment.
 ```yaml
 services:
-	db:
-	wordpress:
+ db:
+ wordpress:
 ```
 Nous allons rajouter les images pour les deux conteneurs.
 Pour la db nous allons utiliser une image MariaDB, qui est la base de donnée relationnel recommandée pour WordPress, nous allons utiliser une version spéciale pour être sûr que ça marche sur l'ordinateur de tous le monde.
 Ça donne donc ça
 ```yaml
 services:
-	db:
-		image: mariadb:10.6.4-focal
-	wordpress:
-		image: wordpress:latest
+ db:
+  image: mariadb:10.6.4-focal
+ wordpress:
+  image: wordpress:latest
 ```
 Maintenant, nous aimerions que les deux conteneurs puissent communiquer entre eux. Plus précisément, on aimerais que la base de donnée expose ses ports 3306 et 33060 au conteneur wordpress. Du côté de wordpress, on aimerait rendre son interface accessible par l'utilisateur sur le port 80.
 ```yaml
 services:
-	db:
-		image: mariadb:10.6.4-focal
-		expose:
-			- 3306
-			- 33060
-	wordpress:
-		image: wordpress:latest
-		ports:
-			- 80:80
+ db:
+  image: mariadb:10.6.4-focal
+  expose:
+   - 3306
+   - 33060
+ wordpress:
+  image: wordpress:latest
+  ports:
+   - 80:80
 ```
 Ici, `ports` est utilisé pour exposer des ports des conteneurs à l'hôte pour un accès externe, tandis que `expose` est utilisé pour permettre aux conteneurs dans le même réseau Docker de communiquer entre eux sans exposer ces ports à l'extérieur du réseau.
 
 Nous allons à présent définir un __Volume Docker__ où wordpress et la base de donnée peuvent stocker leurs données. Un volume Docker est un moyen de stocker des données en dehors du conteneur lui-même, mais de manière à ce que le conteneur puisse y accéder. Cela permet de partager et de persister des données entre différents conteneurs et de conserver des données même si un conteneur est arrêté ou supprimé. Les volumes Docker sont utilisés pour stocker des fichiers, des bases de données, des configurations, etc., de manière à ce qu'ils soient accessibles et préservés même lorsque les conteneurs qui les utilisent sont démarrés, arrêtés ou supprimés.
 ```yaml
 services:
-	db:
-		image: mariadb:10.6.4-focal
-		expose:
-			- 3306
-			- 33060
-		volumes:
-			- db_data:/var/lib/mysql
-	wordpress:
-		image: wordpress:latest
-		ports:
-			- 80:80
-		volumes:
-			- wp_data:/var/www/html
+ db:
+  image: mariadb:10.6.4-focal
+  expose:
+   - 3306
+   - 33060
+  volumes:
+   - db_data:/var/lib/mysql
+ wordpress:
+  image: wordpress:latest
+  ports:
+   - 80:80
+  volumes:
+   - wp_data:/var/www/html
 volumes:
   db_data:
   wp_data:
@@ -255,29 +255,29 @@ A noté que vous être libre de changer la valeur de ces variables.
 Voici ce que ça donne
 ```yaml
 services:
-	db:
-		image: mariadb:10.6.4-focal
-		expose:
-			- 3306
-			- 33060
-		volumes:
-			- db_data:/var/lib/mysql
-		environment:
-			- MYSQL_ROOT_PASSWORD=somewordpress
-			- MYSQL_DATABASE=wordpress
-			- MYSQL_USER=wordpress
-			- MYSQL_PASSWORD=wordpress
-	wordpress:
-		image: wordpress:latest
-		ports:
-			- 80:80
-		volumes:
-			- wp_data:/var/www/html
-		environment:
-			- WORDPRESS_DB_HOST=db
-			- WORDPRESS_DB_USER=wordpress
-			- WORDPRESS_DB_PASSWORD=wordpress
-			- WORDPRESS_DB_NAME=wordpress
+ db:
+  image: mariadb:10.6.4-focal
+  expose:
+   - 3306
+   - 33060
+  volumes:
+   - db_data:/var/lib/mysql
+  environment:
+   - MYSQL_ROOT_PASSWORD=somewordpress
+   - MYSQL_DATABASE=wordpress
+   - MYSQL_USER=wordpress
+   - MYSQL_PASSWORD=wordpress
+ wordpress:
+  image: wordpress:latest
+  ports:
+   - 80:80
+  volumes:
+   - wp_data:/var/www/html
+  environment:
+   - WORDPRESS_DB_HOST=db
+   - WORDPRESS_DB_USER=wordpress
+   - WORDPRESS_DB_PASSWORD=wordpress
+   - WORDPRESS_DB_NAME=wordpress
 volumes:
   db_data:
   wp_data:
@@ -287,31 +287,31 @@ Nous avons bientôt fini, nous devons juste préciser aux conteneurs quoi faire 
 Nous allons rajouter `restart: always` aux deux containers cela dit aux containers de toujours redémarrer s'il y a un plantage.
 ```yaml
 services:
-	db:
-		image: mariadb:10.6.4-focal
-		expose:
-			- 3306
-			- 33060
-		volumes:
-			- db_data:/var/lib/mysql
-		environment:
-			- MYSQL_ROOT_PASSWORD=somewordpress
-			- MYSQL_DATABASE=wordpress
-			- MYSQL_USER=wordpress
-			- MYSQL_PASSWORD=wordpress
-		restart: always
-	wordpress:
-		image: wordpress:latest
-		ports:
-			- 80:80
-		volumes:
-			- wp_data:/var/www/html
-		environment:
-			- WORDPRESS_DB_HOST=db
-			- WORDPRESS_DB_USER=wordpress
-			- WORDPRESS_DB_PASSWORD=wordpress
-			- WORDPRESS_DB_NAME=wordpress
-		restart: always
+ db:
+  image: mariadb:10.6.4-focal
+  expose:
+   - 3306
+   - 33060
+  volumes:
+   - db_data:/var/lib/mysql
+  environment:
+   - MYSQL_ROOT_PASSWORD=somewordpress
+   - MYSQL_DATABASE=wordpress
+   - MYSQL_USER=wordpress
+   - MYSQL_PASSWORD=wordpress
+  restart: always
+ wordpress:
+  image: wordpress:latest
+  ports:
+   - 80:80
+  volumes:
+   - wp_data:/var/www/html
+  environment:
+   - WORDPRESS_DB_HOST=db
+   - WORDPRESS_DB_USER=wordpress
+   - WORDPRESS_DB_PASSWORD=wordpress
+   - WORDPRESS_DB_NAME=wordpress
+  restart: always
 volumes:
   db_data:
   wp_data:
@@ -324,32 +324,32 @@ command: '--default-authentication-plugin=mysql_native_password'
 Le fichier `docker-compose.yaml` final ressemble à ça
 ```yaml
 services:
-	db:
-		image: mariadb:10.6.4-focal
-		expose:
-			- 3306
-			- 33060
-		volumes:
-			- db_data:/var/lib/mysql
-		environment:
-			- MYSQL_ROOT_PASSWORD=somewordpress
-			- MYSQL_DATABASE=wordpress
-			- MYSQL_USER=wordpress
-			- MYSQL_PASSWORD=wordpress
-		restart: always
-		command: '--default-authentication-plugin=mysql_native_password'
-	wordpress:
-		image: wordpress:latest
-		ports:
-			- 80:80
-		volumes:
-			- wp_data:/var/www/html
-		environment:
-			- WORDPRESS_DB_HOST=db
-			- WORDPRESS_DB_USER=wordpress
-			- WORDPRESS_DB_PASSWORD=wordpress
-			- WORDPRESS_DB_NAME=wordpress
-		restart: always
+ db:
+  image: mariadb:10.6.4-focal
+  expose:
+   - 3306
+   - 33060
+  volumes:
+   - db_data:/var/lib/mysql
+  environment:
+   - MYSQL_ROOT_PASSWORD=somewordpress
+   - MYSQL_DATABASE=wordpress
+   - MYSQL_USER=wordpress
+   - MYSQL_PASSWORD=wordpress
+  restart: always
+  command: '--default-authentication-plugin=mysql_native_password'
+ wordpress:
+  image: wordpress:latest
+  ports:
+   - 80:80
+  volumes:
+   - wp_data:/var/www/html
+  environment:
+   - WORDPRESS_DB_HOST=db
+   - WORDPRESS_DB_USER=wordpress
+   - WORDPRESS_DB_PASSWORD=wordpress
+   - WORDPRESS_DB_NAME=wordpress
+  restart: always
 volumes:
   db_data:
   wp_data:

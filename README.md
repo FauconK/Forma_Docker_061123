@@ -255,7 +255,7 @@ Pour la base de donnée:
 - MYSQL_USER=wordpress
 - MYSQL_PASSWORD=wordpress
 
-A noté que vous être libre de changer la valeur de ces variables.
+A noter que vous être libre de changer la valeur de ces variables.
 Voici ce que ça donne
 ```yaml
 services:

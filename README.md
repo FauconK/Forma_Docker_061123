@@ -31,7 +31,7 @@ docker compose version
 ```
 Ensuite on vérifie le lancement de docker :
 ```shell
-docker ps
+sudo docker ps
 ```
 Si à une des trois commandes, le message suivant apparaît, il faut démarrer Docker :
 ```
@@ -124,7 +124,7 @@ services:
 ### Lancement de notre conteneur
 A l’intérieur de notre répertoire de travail, on execute la commande suivante.
 ```shell
-docker-compose up -d
+sudo docker-compose up -d
 ```
 Si cette commande vous renvoie une erreur ou que si vous avez l'impression que le conteneur ne démarre pas, lancer la commande sans le `-d` cela vous permettra d'avoir des logs et de debug votre container.
 Puis on visite l'url suivant : http://localhost:8080/
@@ -132,25 +132,25 @@ Et on devrait voir la page suivante !["Image navigateur"](images/Pasted%20image%
 ### Arrêter le conteneur et le supprimer
 Il y a deux choses à supprimer, notre conteneur, et notre image de conteneur. Pour lister les conteneur on utiliser la commande `docker ps` (`ps`, signifiant process status), cependant cette commande ne renvoie uniquement les conteneurs en exécution et pas les conteneurs qui sont déjà arrêtés, pour tout afficher, on va rajouter le flag `--all`.  Là, on identifie bien notre conteneur dans la liste grâce à la commande suivante.
 ```shell
-docker ps --all
+sudo docker ps --all
 ```
 Avant de supprimer notre conteneur il faut l’arrêter.
 ```shell
-docker stop mon-container
+sudo docker stop mon-container
 ```
 `mon-container`étant le nom que j'ai donné à mon conteneur.
 Ensuite on peut supprimer notre conteneur.
 ```shell
-docker rm mon-container
+sudo docker rm mon-container
 ```
 Une fois que le conteneur est supprimé, on peut supprimer l'image Nginx que Docker a téléchargé pour nous.
 D’abord, on liste les images.
 ```shell
-docker image list
+sudo docker image list
 ```
 On identifie les images que l'on veut supprimer ici c'est l'image Nginx puis on fait
 ```shell
-docker image rm nginx
+sudo docker image rm nginx
 ```
 
 Voilà voilà c'est la fin de ce TP. 
@@ -357,7 +357,7 @@ volumes:
 
 Maintenant, pour lancer les conteneurs docker. On execute dans le répertoire de ce fichier la commande suivante.
 ```shell
-docker compose up -d
+sudo docker compose up -d
 ```
 Si on a l'impression qu'il y a un problème, on peut retirer le `-d` pour voir exactement ce qu'il se passe.
 
@@ -370,19 +370,19 @@ Il ne reste plus qu'a configurer WordPress mais cela est en dehors de la porté 
 Il suffit de faire comme dans le TP1 - Nginx pour supprimer les conteneurs et les images. Ce qu'il y a de plus à supprimer c'est les volumes qui stockent la configuration de WordPress et de la base de donnée.
 Pour les lister on fait
 ```shell
-docker volume ls
+sudo docker volume ls
 ```
 Puis on fait pour supprimer
 ```shell
-docker volume rm db_data
+sudo docker volume rm db_data
 ```
 et
 ```shell
-docker volume rm wp_data
+sudo docker volume rm wp_data
 ```
 On peut vérifier avec la commande suivante si tous les volumes sont bien supprimés 
 ```shell
-docker volume ls
+sudo docker volume ls
 ```
 
 Voilà vous savez maintenant comment créer un fichier `docker-compose.yml` pour décrire un déploiement, vous connaissez la structure du fichier docker-compose et vous avez appris comment utiliser quelque directives comme

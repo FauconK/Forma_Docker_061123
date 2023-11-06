@@ -42,7 +42,7 @@ Cannot connect to the Docker daemon at unix:///Users/user/.docker/run/docker.soc
 ### Introduction
 Pour cette partie, nous allons utiliser Nginx, Nginx est un logiciel qui aide à gérer les sites web. Il peut servir des pages web, équilibrer la charge du trafic, améliorer la sécurité, et bien plus encore. Il est apprécié pour sa rapidité et sa flexibilité, ce qui en fait un choix populaire pour de nombreux sites web et applications en ligne. 
 Voici un schéma expliquant le rôle de Nginx :
-!["Schéma Nginx"](images/Pasted%20image%2020231106015621.png)
+!["Schéma Nginx"](monpremierdockercompose/images/Pasted%20image%2020231106015621.png)
 
 Plus précisément, nous allons utiliser l'image Docker Nginx.
 Une image Docker Nginx est comme un "conteneur" qui contient un serveur web Nginx prêt à l'emploi. Vous pouvez utiliser cette image pour facilement exécuter des serveurs web Nginx dans des environnements isolés et répétables, ce qui simplifie la gestion de sites web. C'est un peu comme avoir une boîte contenant tout ce dont vous avez besoin pour faire fonctionner Nginx, prête à être déployée sur un ordinateur.
@@ -128,7 +128,7 @@ sudo docker-compose up -d
 ```
 Si cette commande vous renvoie une erreur ou que si vous avez l'impression que le conteneur ne démarre pas, lancer la commande sans le `-d` cela vous permettra d'avoir des logs et de debug votre container.
 Puis on visite l'url suivant : http://localhost:8080/
-Et on devrait voir la page suivante !["Image navigateur"](images/Pasted%20image%2020231106023433.png)
+Et on devrait voir la page suivante !["Image navigateur"](monpremierdockercompose/images/Pasted%20image%2020231106023433.png)
 ### Arrêter le conteneur et le supprimer
 Il y a deux choses à supprimer, notre conteneur, et notre image de conteneur. Pour lister les conteneur on utiliser la commande `docker ps` (`ps`, signifiant process status), cependant cette commande ne renvoie uniquement les conteneurs en exécution et pas les conteneurs qui sont déjà arrêtés, pour tout afficher, on va rajouter le flag `--all`.  Là, on identifie bien notre conteneur dans la liste grâce à la commande suivante.
 ```shell
@@ -362,8 +362,8 @@ sudo docker compose up -d
 Si on a l'impression qu'il y a un problème, on peut retirer le `-d` pour voir exactement ce qu'il se passe.
 
 Ensuite nous pouvons nous rendre sur http://localhost (ou http://localhost:80 pour certain). 
-Nous devrions voir la page suivante s'afficher !["Image WordPress"](images/Pasted%20image%2020231106141526.png)
-!["Image WordPress 2"](images/Pasted%20image%2020231106141540.png)
+Nous devrions voir la page suivante s'afficher !["Image WordPress"](monpremierdockercompose/images/Pasted%20image%2020231106141526.png)
+!["Image WordPress 2"](monpremierdockercompose/images/Pasted%20image%2020231106141540.png)
 Il ne reste plus qu'a configurer WordPress mais cela est en dehors de la porté de ce TP. Pour ceux qui souhaitent approfondir l’installation de WordPress voici deux liens utiles. [Installation en 5min](https://fr.wordpress.org/support/article/how-to-install-wordpress/) et [les premiers pas avec WordPress](https://fr.wordpress.org/support/article/first-steps-with-wordpress/).
 
 ###  Arrêter les containers et les supprimer

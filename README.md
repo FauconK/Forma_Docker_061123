@@ -175,7 +175,9 @@ Il nous faudra en gros d'après la documentation
  	- Un moyen de laisser WordPress se connecter à la base de donnée.
 
 Avec un schéma ça donne ça
+
 !["Schéma WordPress"](monpremierdockercompose/images/docker.drawio%201.png)
+
 On va commencer à décrire cette architecture multi-conteneur dans un fichier `docker-compose.yml`.
 ### Fichier docker compose
 Nous allons dans un premier temps créer un nouveau dossier vide.

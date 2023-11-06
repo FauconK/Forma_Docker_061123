@@ -1,0 +1,9 @@
+version: '3'
+services:
+  mon-site-web:
+    container_name: mon-container
+    image: nginx:latest
+    ports:
+      - "8080:80"
+    volumes:
+      - ./index.html:/usr/share/nginx/html/index.html

@@ -7,6 +7,9 @@
   * On utilise flask pour faire tourner notre site web
   * Les requirements python pour le site web sont dans requirements.txt
   * flask run permet de lancer le site
+  * Ne pas oublier d'export les variables d'env:
+	* ENV FLASK_APP=site.py
+	* ENV FLASK_RUN_HOST=0.0.0.0
 * Créer un docker file 
   * On utilisera python:3.10-alpine comme image de base
     * L'avantage de alpine est que c'est une distribution très légère donc qui se lancera rapidement

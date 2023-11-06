@@ -2,7 +2,7 @@
 FROM python:3.10-alpine
 RUN mkdir /code
 WORKDIR /code
-ENV FLASK_APP=nodbmain.py
+ENV FLASK_APP=site.py
 ENV FLASK_RUN_HOST=0.0.0.0
 RUN apk add --no-cache gcc musl-dev linux-headers
 COPY requirements.txt requirements.txt

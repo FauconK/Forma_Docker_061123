@@ -38,7 +38,7 @@ docker compose version
 ```
 Ensuite on vérifie le lancement de docker :
 ```shell
-docker ps
+sudo docker ps
 ```
 Si à une des trois commandes, le message suivant apparaît, il faut démarrer Docker :
 ```
@@ -49,7 +49,7 @@ Cannot connect to the Docker daemon at unix:///Users/user/.docker/run/docker.soc
 ### Introduction
 Pour cette partie, nous allons utiliser Nginx, Nginx est un logiciel qui aide à gérer les sites web. Il peut servir des pages web, équilibrer la charge du trafic, améliorer la sécurité, et bien plus encore. Il est apprécié pour sa rapidité et sa flexibilité, ce qui en fait un choix populaire pour de nombreux sites web et applications en ligne. 
 Voici un schéma expliquant le rôle de Nginx :
-!["Schéma Nginx"](images/Pasted%20image%2020231106015621.png)
+!["Schéma Nginx"](monpremierdockercompose/images/Pasted%20image%2020231106015621.png)
 
 Plus précisément, nous allons utiliser l'image Docker Nginx.
 Une image Docker Nginx est comme un "conteneur" qui contient un serveur web Nginx prêt à l'emploi. Vous pouvez utiliser cette image pour facilement exécuter des serveurs web Nginx dans des environnements isolés et répétables, ce qui simplifie la gestion de sites web. C'est un peu comme avoir une boîte contenant tout ce dont vous avez besoin pour faire fonctionner Nginx, prête à être déployée sur un ordinateur.
@@ -96,32 +96,32 @@ Pour des questions de lisibilité nous allons aussi donner un nom à notre conta
 ```yaml
 services:
   mon-site-web:
-	  container_name: mon-container
+   container_name: mon-container
 ```
 
 On rajoute l'image Nginx à notre fichier docker compose tout en précisant d'utiliser la version la plus récente de l'image (pour les curieux, les versions de l'image Docker Nginx sont trouvable sur [Docker Hub](https://hub.docker.com/_/nginx/)).
 ```yaml
 services:
   mon-site-web:
-	  container_name: mon-container
-	  image: nginx:latest
+   container_name: mon-container
+ image: nginx:latest
 ```
 Pour le port, on va demander à Docker d'exposer le port 80 du conteneur Nginx sur le port 8080 de votre machine hôte.
 ```yaml
 services:
   mon-site-web:
-	  container_name: mon-container
-	  image: nginx:latest
-	  ports:
-		  - "8080:80"
+   container_name: mon-container
+ image: nginx:latest
+ ports:
+  - "8080:80"
 ```
 Pour finir, il nous reste plus qu'à donner le notre fichier ``index.html`` au conteneur. 
 Le serveur web Nginx sert tous les fichiers qui se trouvent dans son répertoire `/usr/share/nginx/html/`. Nous allons donc dire à Nginx de mettre notre fichier ``index.html`` dans le dossier `/usr/share/nginx/html` du conteneur.
 ```yaml
 version: '3'
 services:
-  mon-site-web:
-	container_name: mon-container
+ mon-site-web:
+ container_name: mon-container
     image: nginx:latest
     ports:
       - "8080:80"
@@ -131,33 +131,33 @@ services:
 ### Lancement de notre conteneur
 A l’intérieur de notre répertoire de travail, on execute la commande suivante.
 ```shell
-docker-compose up -d
+sudo docker compose up -d
 ```
 Si cette commande vous renvoie une erreur ou que si vous avez l'impression que le conteneur ne démarre pas, lancer la commande sans le `-d` cela vous permettra d'avoir des logs et de debug votre container.
 Puis on visite l'url suivant : http://localhost:8080/
-Et on devrait voir la page suivante !["Image navigateur"](images/Pasted%20image%2020231106023433.png)
+Et on devrait voir la page suivante !["Image navigateur"](monpremierdockercompose/images/Pasted%20image%2020231106023433.png)
 ### Arrêter le conteneur et le supprimer
 Il y a deux choses à supprimer, notre conteneur, et notre image de conteneur. Pour lister les conteneur on utiliser la commande `docker ps` (`ps`, signifiant process status), cependant cette commande ne renvoie uniquement les conteneurs en exécution et pas les conteneurs qui sont déjà arrêtés, pour tout afficher, on va rajouter le flag `--all`.  Là, on identifie bien notre conteneur dans la liste grâce à la commande suivante.
 ```shell
-docker ps --all
+sudo docker ps --all
 ```
 Avant de supprimer notre conteneur il faut l’arrêter.
 ```shell
-docker stop mon-container
+sudo docker stop mon-container
 ```
 `mon-container`étant le nom que j'ai donné à mon conteneur.
 Ensuite on peut supprimer notre conteneur.
 ```shell
-docker rm mon-container
+sudo docker rm mon-container
 ```
 Une fois que le conteneur est supprimé, on peut supprimer l'image Nginx que Docker a téléchargé pour nous.
 D’abord, on liste les images.
 ```shell
-docker image list
+sudo docker image list
 ```
 On identifie les images que l'on veut supprimer ici c'est l'image Nginx puis on fait
 ```shell
-docker image rm nginx
+sudo docker image rm nginx
 ```
 
 Voilà voilà c'est la fin de ce TP. 
@@ -179,10 +179,12 @@ Il nous faudra en gros d'après la documentation
 	- Un moyen de laisser l'utilisateur se connecter à WordPress
 - Un conteneur pour la base de donnée
 	- Un endroit où stocker les données des utilisateurs( les comptes, les sites web...)
-	- Un moyen de laisser WordPress se connecter à la base de donnée.
+ 	- Un moyen de laisser WordPress se connecter à la base de donnée.
 
 Avec un schéma ça donne ça
-![[docker.drawio 1.png]]
+
+!["Schéma WordPress"](monpremierdockercompose/images/docker.drawio%201.png)
+
 On va commencer à décrire cette architecture multi-conteneur dans un fichier `docker-compose.yml`.
 ### Fichier docker compose
 Nous allons dans un premier temps créer un nouveau dossier vide.
@@ -195,50 +197,50 @@ Ensuite on va créer un fichier `docker-compose.yml`.
 Notre fichier docker compose ressemble donc à ça pour le moment.
 ```yaml
 services:
-	db:
-	wordpress:
+ db:
+ wordpress:
 ```
 Nous allons rajouter les images pour les deux conteneurs.
 Pour la db nous allons utiliser une image MariaDB, qui est la base de donnée relationnel recommandée pour WordPress, nous allons utiliser une version spéciale pour être sûr que ça marche sur l'ordinateur de tous le monde.
 Ça donne donc ça
 ```yaml
 services:
-	db:
-		image: mariadb:10.6.4-focal
-	wordpress:
-		image: wordpress:latest
+ db:
+  image: mariadb:10.6.4-focal
+ wordpress:
+  image: wordpress:latest
 ```
 Maintenant, nous aimerions que les deux conteneurs puissent communiquer entre eux. Plus précisément, on aimerais que la base de donnée expose ses ports 3306 et 33060 au conteneur wordpress. Du côté de wordpress, on aimerait rendre son interface accessible par l'utilisateur sur le port 80.
 ```yaml
 services:
-	db:
-		image: mariadb:10.6.4-focal
-		expose:
-			- 3306
-			- 33060
-	wordpress:
-		image: wordpress:latest
-		ports:
-			- 80:80
+ db:
+  image: mariadb:10.6.4-focal
+  expose:
+   - 3306
+   - 33060
+ wordpress:
+  image: wordpress:latest
+  ports:
+   - 80:80
 ```
 Ici, `ports` est utilisé pour exposer des ports des conteneurs à l'hôte pour un accès externe, tandis que `expose` est utilisé pour permettre aux conteneurs dans le même réseau Docker de communiquer entre eux sans exposer ces ports à l'extérieur du réseau.
 
 Nous allons à présent définir un __Volume Docker__ où wordpress et la base de donnée peuvent stocker leurs données. Un volume Docker est un moyen de stocker des données en dehors du conteneur lui-même, mais de manière à ce que le conteneur puisse y accéder. Cela permet de partager et de persister des données entre différents conteneurs et de conserver des données même si un conteneur est arrêté ou supprimé. Les volumes Docker sont utilisés pour stocker des fichiers, des bases de données, des configurations, etc., de manière à ce qu'ils soient accessibles et préservés même lorsque les conteneurs qui les utilisent sont démarrés, arrêtés ou supprimés.
 ```yaml
 services:
-	db:
-		image: mariadb:10.6.4-focal
-		expose:
-			- 3306
-			- 33060
-		volumes:
-			- db_data:/var/lib/mysql
-	wordpress:
-		image: wordpress:latest
-		ports:
-			- 80:80
-		volumes:
-			- wp_data:/var/www/html
+ db:
+  image: mariadb:10.6.4-focal
+  expose:
+   - 3306
+   - 33060
+  volumes:
+   - db_data:/var/lib/mysql
+ wordpress:
+  image: wordpress:latest
+  ports:
+   - 80:80
+  volumes:
+   - wp_data:/var/www/html
 volumes:
   db_data:
   wp_data:
@@ -247,44 +249,46 @@ volumes:
 Nous allons maintenant passer quelques variables d'environnement aux deux conteneurs, ces variables d'environnement sont des variables définies par la documentation de wordpress. 
 Une variable d'environnement Docker est une valeur spécifique que vous pouvez définir pour influencer le comportement d'un conteneur Docker. C'est comme une petite note que vous donnez au conteneur pour lui dire comment se comporter. Par exemple, vous pouvez définir une variable d'environnement pour spécifier un mot de passe, une URL, ou d'autres paramètres nécessaires à une application qui s'exécute dans le conteneur. Ces variables sont utilisées par les applications à l'intérieur du conteneur pour configurer leur fonctionnement.
 Nous allons définir les variables suivantes
+
 Pour wordpress:
  - WORDPRESS_DB_HOST=db
  - WORDPRESS_DB_USER=wordpress
  - WORDPRESS_DB_PASSWORD=wordpress
  - WORDPRESS_DB_NAME=wordpress
-Pour la base de donnée
+
+Pour la base de donnée:
 - MYSQL_ROOT_PASSWORD=somewordpress
 - MYSQL_DATABASE=wordpress
 - MYSQL_USER=wordpress
 - MYSQL_PASSWORD=wordpress
 
-A noté que vous être libre de changer la valeur de ces variables.
+A noter que vous être libre de changer la valeur de ces variables.
 Voici ce que ça donne
 ```yaml
 services:
-	db:
-		image: mariadb:10.6.4-focal
-		expose:
-			- 3306
-			- 33060
-		volumes:
-			- db_data:/var/lib/mysql
-		environment:
-			- MYSQL_ROOT_PASSWORD=somewordpress
-			- MYSQL_DATABASE=wordpress
-			- MYSQL_USER=wordpress
-			- MYSQL_PASSWORD=wordpress
-	wordpress:
-		image: wordpress:latest
-		ports:
-			- 80:80
-		volumes:
-			- wp_data:/var/www/html
-		environment:
-			- WORDPRESS_DB_HOST=db
-			- WORDPRESS_DB_USER=wordpress
-			- WORDPRESS_DB_PASSWORD=wordpress
-			- WORDPRESS_DB_NAME=wordpress
+ db:
+  image: mariadb:10.6.4-focal
+  expose:
+   - 3306
+   - 33060
+  volumes:
+   - db_data:/var/lib/mysql
+  environment:
+   - MYSQL_ROOT_PASSWORD=somewordpress
+   - MYSQL_DATABASE=wordpress
+   - MYSQL_USER=wordpress
+   - MYSQL_PASSWORD=wordpress
+ wordpress:
+  image: wordpress:latest
+  ports:
+   - 80:80
+  volumes:
+   - wp_data:/var/www/html
+  environment:
+   - WORDPRESS_DB_HOST=db
+   - WORDPRESS_DB_USER=wordpress
+   - WORDPRESS_DB_PASSWORD=wordpress
+   - WORDPRESS_DB_NAME=wordpress
 volumes:
   db_data:
   wp_data:
@@ -294,31 +298,31 @@ Nous avons bientôt fini, nous devons juste préciser aux conteneurs quoi faire 
 Nous allons rajouter `restart: always` aux deux containers cela dit aux containers de toujours redémarrer s'il y a un plantage.
 ```yaml
 services:
-	db:
-		image: mariadb:10.6.4-focal
-		expose:
-			- 3306
-			- 33060
-		volumes:
-			- db_data:/var/lib/mysql
-		environment:
-			- MYSQL_ROOT_PASSWORD=somewordpress
-			- MYSQL_DATABASE=wordpress
-			- MYSQL_USER=wordpress
-			- MYSQL_PASSWORD=wordpress
-		restart: always
-	wordpress:
-		image: wordpress:latest
-		ports:
-			- 80:80
-		volumes:
-			- wp_data:/var/www/html
-		environment:
-			- WORDPRESS_DB_HOST=db
-			- WORDPRESS_DB_USER=wordpress
-			- WORDPRESS_DB_PASSWORD=wordpress
-			- WORDPRESS_DB_NAME=wordpress
-		restart: always
+ db:
+  image: mariadb:10.6.4-focal
+  expose:
+   - 3306
+   - 33060
+  volumes:
+   - db_data:/var/lib/mysql
+  environment:
+   - MYSQL_ROOT_PASSWORD=somewordpress
+   - MYSQL_DATABASE=wordpress
+   - MYSQL_USER=wordpress
+   - MYSQL_PASSWORD=wordpress
+  restart: always
+ wordpress:
+  image: wordpress:latest
+  ports:
+   - 80:80
+  volumes:
+   - wp_data:/var/www/html
+  environment:
+   - WORDPRESS_DB_HOST=db
+   - WORDPRESS_DB_USER=wordpress
+   - WORDPRESS_DB_PASSWORD=wordpress
+   - WORDPRESS_DB_NAME=wordpress
+  restart: always
 volumes:
   db_data:
   wp_data:
@@ -331,32 +335,32 @@ command: '--default-authentication-plugin=mysql_native_password'
 Le fichier `docker-compose.yaml` final ressemble à ça
 ```yaml
 services:
-	db:
-		image: mariadb:10.6.4-focal
-		expose:
-			- 3306
-			- 33060
-		volumes:
-			- db_data:/var/lib/mysql
-		environment:
-			- MYSQL_ROOT_PASSWORD=somewordpress
-			- MYSQL_DATABASE=wordpress
-			- MYSQL_USER=wordpress
-			- MYSQL_PASSWORD=wordpress
-		restart: always
-		command: '--default-authentication-plugin=mysql_native_password'
-	wordpress:
-		image: wordpress:latest
-		ports:
-			- 80:80
-		volumes:
-			- wp_data:/var/www/html
-		environment:
-			- WORDPRESS_DB_HOST=db
-			- WORDPRESS_DB_USER=wordpress
-			- WORDPRESS_DB_PASSWORD=wordpress
-			- WORDPRESS_DB_NAME=wordpress
-		restart: always
+ db:
+  image: mariadb:10.6.4-focal
+  expose:
+   - 3306
+   - 33060
+  volumes:
+   - db_data:/var/lib/mysql
+  environment:
+   - MYSQL_ROOT_PASSWORD=somewordpress
+   - MYSQL_DATABASE=wordpress
+   - MYSQL_USER=wordpress
+   - MYSQL_PASSWORD=wordpress
+  restart: always
+  command: '--default-authentication-plugin=mysql_native_password'
+ wordpress:
+  image: wordpress:latest
+  ports:
+   - 80:80
+  volumes:
+   - wp_data:/var/www/html
+  environment:
+   - WORDPRESS_DB_HOST=db
+   - WORDPRESS_DB_USER=wordpress
+   - WORDPRESS_DB_PASSWORD=wordpress
+   - WORDPRESS_DB_NAME=wordpress
+  restart: always
 volumes:
   db_data:
   wp_data:
@@ -364,32 +368,32 @@ volumes:
 
 Maintenant, pour lancer les conteneurs docker. On execute dans le répertoire de ce fichier la commande suivante.
 ```shell
-docker compose up -d
+sudo docker compose up -d
 ```
 Si on a l'impression qu'il y a un problème, on peut retirer le `-d` pour voir exactement ce qu'il se passe.
 
 Ensuite nous pouvons nous rendre sur http://localhost (ou http://localhost:80 pour certain). 
-Nous devrions voir la page suivante s'afficher !["Image WordPress"](images/Pasted%20image%2020231106141526.png)
-!["Image WordPress 2"](images/Pasted%20image%2020231106141540.png)
+Nous devrions voir la page suivante s'afficher !["Image WordPress"](monpremierdockercompose/images/Pasted%20image%2020231106141526.png)
+!["Image WordPress 2"](monpremierdockercompose/images/Pasted%20image%2020231106141540.png)
 Il ne reste plus qu'a configurer WordPress mais cela est en dehors de la porté de ce TP. Pour ceux qui souhaitent approfondir l’installation de WordPress voici deux liens utiles. [Installation en 5min](https://fr.wordpress.org/support/article/how-to-install-wordpress/) et [les premiers pas avec WordPress](https://fr.wordpress.org/support/article/first-steps-with-wordpress/).
 
 ###  Arrêter les containers et les supprimer
 Il suffit de faire comme dans le TP1 - Nginx pour supprimer les conteneurs et les images. Ce qu'il y a de plus à supprimer c'est les volumes qui stockent la configuration de WordPress et de la base de donnée.
 Pour les lister on fait
 ```shell
-docker volume ls
+sudo docker volume ls
 ```
 Puis on fait pour supprimer
 ```shell
-docker volume rm db_data
+sudo docker volume rm db_data
 ```
 et
 ```shell
-docker volume rm wp_data
+sudo docker volume rm wp_data
 ```
 On peut vérifier avec la commande suivante si tous les volumes sont bien supprimés 
 ```shell
-docker volume ls
+sudo docker volume ls
 ```
 
 Voilà vous savez maintenant comment créer un fichier `docker-compose.yml` pour décrire un déploiement, vous connaissez la structure du fichier docker-compose et vous avez appris comment utiliser quelque directives comme

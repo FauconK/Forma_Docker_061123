@@ -1,16 +1,18 @@
 # Forma_Docker
 
+# Partie 1
+
 # Déployer un premier site web avec un Docker File
 
 * Cloner le dépot github
-* Compléter le code de monpremierdocker/site.py
+* Compléter le code de monpremierdocker/premiersite.py
   * On utilise flask pour faire tourner notre site web
   * Les requirements python pour le site web sont dans requirements.txt
-  * flask run permet de lancer le site
-  * Ne pas oublier d'export les variables d'env:
-	* ENV FLASK_APP=site.py
-	* ENV FLASK_RUN_HOST=0.0.0.0
-* Créer un docker file 
+* Ne pas oublier d'export les variables d'env:
+  * ENV FLASK_APP=site.py
+  * ENV FLASK_RUN_HOST=0.0.0.0
+* flask run permet de lancer le site
+* Créer un Dockerfile, la correction est dans le dossier monpremierdocker
   * On utilisera python:3.10-alpine comme image de base
     * L'avantage de alpine est que c'est une distribution très légère donc qui se lancera rapidement
   * Ne pas oublier de copier le requirement dans le docker
@@ -21,6 +23,8 @@
 ## References 
 * [Getting started with Flask](https://flask.palletsprojects.com/en/2.2.x/quickstart/)
 * [Containerize an application](https://docs.docker.com/get-started/02_our_app/)
+
+# Partie 2
 
 # TP Docker Compose
 ## Vérification de l'installation de Docker et de Docker Compose
@@ -41,7 +45,7 @@ Si à une des trois commandes, le message suivant apparaît, il faut démarrer D
 Cannot connect to the Docker daemon at unix:///Users/user/.docker/run/docker.sock. Is the docker daemon running?
 ```
 
-## TP1 - Nginx
+## Nginx
 ### Introduction
 Pour cette partie, nous allons utiliser Nginx, Nginx est un logiciel qui aide à gérer les sites web. Il peut servir des pages web, équilibrer la charge du trafic, améliorer la sécurité, et bien plus encore. Il est apprécié pour sa rapidité et sa flexibilité, ce qui en fait un choix populaire pour de nombreux sites web et applications en ligne. 
 Voici un schéma expliquant le rôle de Nginx :
